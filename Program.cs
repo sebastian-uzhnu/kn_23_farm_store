@@ -1,13 +1,66 @@
-﻿using System.Reflection.Metadata.Ecma335;
+﻿using System.Globalization;
 
 namespace _2025_KN_23_Lab3;
 
 class Program
 {
+    private static Product p1, p2, p3, p4, p5;
+
+
+    public static void PrintProduct(Product p)
+    {
+        Console.WriteLine($"|| {p.Name} | {p.Price}грн ||");
+    }
+
+    public static void AskForProduct()
+    {
+        while (true)
+        {
+            Console.Write("Введіть назву продукта: ");
+            string name = Console.ReadLine();
+
+            double price = GetUserInput( "Введіть ціну продукта");
+
+            // Console.WriteLine(String.IsNullOrWhiteSpace(p1.Name));
+            
+            if (p1.IsEmpty()) p1 = new Product(name, (int) price);
+            else if (p2.IsEmpty()) p2 = new Product(name, (int) price);
+            else if (p3.IsEmpty()) p3 = new Product(name, (int) price);
+            else if (p4.IsEmpty()) p4 = new Product(name, (int) price);
+            else if (p5.IsEmpty()) p5 = new Product(name, (int) price);
+            else
+            {
+                Console.WriteLine("Немає місця для продуктів");
+                break;
+            }
+
+            Console.WriteLine("---");
+            Console.WriteLine("Чи хочете додати ще один продукт 1 - Yes, 0 - No");
+            int choice = (int)GetUserInput();
+
+            if (choice == 1)
+            {
+                AskForProduct();
+                break;
+            } else if (choice == 0)
+            {
+                Console.WriteLine("Ваші продукти:");
+                
+                if (!p1.IsEmpty()) PrintProduct(p1);
+                if (!p2.IsEmpty()) PrintProduct(p2);
+                if (!p3.IsEmpty()) PrintProduct(p3);
+                break;
+            }
+          
+            
+            Environment.Exit(0);
+        }
+    }
+    
     public static void Main(string[] args)
     {
-        RenderIntro();
-        ShowMainMenu();
+
+        AskForProduct();
     }
 
     public static void RenderIntro()
@@ -22,8 +75,8 @@ class Program
     public static double GetUserInput(string prompt = "Введіть число:")
     {
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.Write(prompt + " ");
 
+        Console.Write(prompt + " ");
         bool isNumber = Double.TryParse(Console.ReadLine(), out double choice);
 
         if (!isNumber)
@@ -38,7 +91,7 @@ class Program
 
         return choice;
     }
-    
+
 
     public static void ShowMainMenu()
     {
@@ -91,7 +144,7 @@ class Program
         double priceMeat = 120;
         double priceMilk = 30;
         double priceEggs = 60;
-        
+
         Console.WriteLine("Наші товари:");
         Console.WriteLine($"1. Зерно ({priceGrain} грн)");
         Console.WriteLine($"2. Овочі ({priceVegetables} грн)");
@@ -105,16 +158,14 @@ class Program
         double meat = GetUserInput("Введіть кількість мяса (кг): ");
         double milk = GetUserInput("Введіть кількість молока (л): ");
         double eggs = GetUserInput("Введіть кількість яєць (шт): ");
-        
-       
-        
+
         // Обрахунок вартості товару
         double totalGrain = grain * priceGrain;
         double totalVegetables = vegetables * priceVegetables;
         double totalMeat = meat * priceMeat;
         double totalMilk = milk * priceMilk;
         double totalEggs = eggs * priceEggs;
-        
+
         double totalPrice = totalGrain
                             + totalVegetables
                             + totalMeat
@@ -126,16 +177,17 @@ class Program
         if (totalPrice > 1000 && totalPrice < 5000)
         {
             discount = 15;
-        } else if (totalPrice > 10_000)
+        }
+        else if (totalPrice > 10_000)
         {
             discount = 50;
         }
-        
+
         double discountTotal = Math.Round(totalPrice * (discount / 100));
-        
+
         // Вивід підсумків
         Console.ForegroundColor = ConsoleColor.DarkBlue;
-        
+
         System.Console.WriteLine();
         Console.WriteLine("=== Підсумок покупки ===");
         Console.WriteLine($"Зерно: {grain} кг, вартість за кг ({priceGrain}) вартість: {totalGrain} грн.");
@@ -144,13 +196,13 @@ class Program
         Console.WriteLine($"Молоко: {milk} л, вартість: {totalMilk} грн.");
         Console.WriteLine($"Яйця: {eggs} шт., вартість: {totalEggs} грн.");
         Console.ResetColor();
-        
+
         Console.ForegroundColor = ConsoleColor.DarkCyan;
         Console.WriteLine($"Загальна вартість: {totalPrice} грн.");
         Console.WriteLine($"Знижка: {discount}%");
         Console.WriteLine($"Вартість після знижки: {totalPrice - discountTotal} грн.");
         Console.ResetColor();
-        
+
         System.Console.WriteLine("Дякуємо за вашу покупку!");
         Console.WriteLine("для продовження роботи натисніть будь яку клавішу");
         Console.ReadKey();
